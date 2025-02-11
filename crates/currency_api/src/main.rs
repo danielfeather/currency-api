@@ -1,3 +1,5 @@
+use chrono::{DateTime, Local};
+use serde;
 use std::collections::HashMap;
 
 use axum::{routing::get, Json, Router};
@@ -20,8 +22,8 @@ async fn root() -> Json<Rates> {
     Json(Rates {
         disclaimer: "".to_string(),
         license: "".to_string(),
-        timestamp: time::OffsetDateTime::now_utc(),
-        base: currency_core::Currency::GBP,
+        timestamp: Local::now().to_utc(),
+        base: currency_core::CurrencyCode::new("GBP"),
         rates: HashMap::default(),
     })
 }

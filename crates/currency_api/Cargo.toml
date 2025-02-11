@@ -12,4 +12,5 @@ sqlx = { version = "0.8", features = [
 tokio = { version = "1.43.0", features = ["full"] }
 tracing-subscriber = "0.3.19"
 currency_core = { path = "../currency_core" }
-time = { version = "0.3.37", features = ["serde"] }
+chrono = { version = "0.4.39", features = ["serde"] }
+serde = { version = "1.0.217", features = ["derive"] }

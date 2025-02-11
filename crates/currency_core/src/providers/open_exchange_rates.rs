@@ -1,13 +1,15 @@
+use chrono::{serde::ts_seconds, DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::Currency;
+use crate::CurrencyCode;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Rates {
     pub disclaimer: String,
     pub license: String,
-    pub timestamp: time::OffsetDateTime,
-    pub base: Currency,
-    pub rates: HashMap<Currency, f32>,
+    #[serde(with = "ts_seconds")]
+    pub timestamp: DateTime<Utc>,
+    pub base: CurrencyCode,
+    pub rates: HashMap<CurrencyCode, f32>,
 }
