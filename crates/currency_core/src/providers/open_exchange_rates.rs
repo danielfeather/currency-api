@@ -1,7 +1,5 @@
-use std::collections::HashMap;
-
-use chrono::DateTime;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 use crate::Currency;
 
@@ -9,7 +7,7 @@ use crate::Currency;
 pub struct Rates {
     pub disclaimer: String,
     pub license: String,
-    pub timestamp: DateTime,
+    pub timestamp: time::OffsetDateTime,
     pub base: Currency,
     pub rates: HashMap<Currency, f32>,
 }

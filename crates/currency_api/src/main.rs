@@ -20,7 +20,7 @@ async fn root() -> Json<Rates> {
     Json(Rates {
         disclaimer: "".to_string(),
         license: "".to_string(),
-        timestamp: 0_usize,
+        timestamp: time::OffsetDateTime::now_utc(),
         base: currency_core::Currency::GBP,
         rates: HashMap::default(),
     })
