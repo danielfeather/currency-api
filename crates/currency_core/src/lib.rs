@@ -1,7 +1,9 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize, Hash)]
-#[serde(rename_all = "lowercase")]
+pub mod providers;
+
+#[derive(Debug, Serialize, Deserialize, Hash, PartialEq, Eq)]
+#[serde(rename_all = "UPPERCASE")]
 pub enum Currency {
     AFN,
     EUR,
@@ -17,11 +19,8 @@ pub enum Currency {
     BDT,
     BBD,
     BYN,
-
     BZD,
-
     BMD,
-
     BTN,
     BOB,
     BOV,
@@ -47,9 +46,7 @@ pub enum Currency {
     KMF,
     CDF,
     CRC,
-
     CUP,
-
     CZK,
     DJF,
     XCD,
@@ -57,26 +54,19 @@ pub enum Currency {
     EGP,
     SVC,
     ERN,
-
     SZL,
     ETB,
-
     FKP,
     DKK,
     FJD,
-
     GMD,
     GEL,
-
     GHS,
     GIP,
-
     GTQ,
     GNF,
-
     GYD,
     HTG,
-
     HNL,
     HKD,
     HUF,
@@ -88,7 +78,6 @@ pub enum Currency {
     IQD,
     GBP,
     ILS,
-
     JMD,
     JPY,
     JOD,
@@ -99,29 +88,23 @@ pub enum Currency {
     KWD,
     KGS,
     LAK,
-
     LBP,
     LSL,
     LRD,
     LYD,
-
     MOP,
     MKD,
     MGA,
     MWK,
     MYR,
     MVR,
-
     MRU,
     MUR,
-
     XUA,
     MXN,
     MXV,
     MDL,
-
     MNT,
-
     MAD,
     MZN,
     MMK,
@@ -131,44 +114,33 @@ pub enum Currency {
     XPF,
     NZD,
     NIO,
-
     NGN,
     NOK,
     OMR,
     PKR,
-
     PAB,
     PGK,
     PYG,
     PEN,
     PHP,
     PLN,
-
     QAR,
-
     RON,
     RUB,
     RWF,
-
     SHP,
-
     WST,
-
     STN,
     SAR,
-
     RSD,
     SCR,
     SLE,
     SGD,
     ANG,
     XSU,
-
     SBD,
     SOS,
-
     SSP,
-
     LKR,
     SDG,
     SRD,
@@ -181,7 +153,6 @@ pub enum Currency {
     TJS,
     TZS,
     THB,
-
     TOP,
     TTD,
     TND,
