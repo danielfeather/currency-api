@@ -27,3 +27,5 @@ async fn root() -> Json<Rates> {
         rates: HashMap::default(),
     })
 }
+
+// async fn exchange() -> Json<>

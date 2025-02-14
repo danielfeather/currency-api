@@ -13,3 +13,5 @@ pub struct Rates {
     pub base: CurrencyCode,
     pub rates: HashMap<CurrencyCode, f32>,
 }
+
+pub const BASE_URL: &'static str = "https://openexchangerates.org/api";

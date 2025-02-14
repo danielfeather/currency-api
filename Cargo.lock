@@ -415,6 +415,9 @@ name = "currency_cli"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "currency_core",
+ "serde_json",
+ "thiserror",
  "ureq",
 ]
 
