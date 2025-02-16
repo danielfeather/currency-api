@@ -1,0 +1,96 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Launch",
+      "program": "${workspaceFolder}/<program>",
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug executable 'currency_api'",
+      "cargo": {
+        "args": ["build", "--bin=currency_api", "--package=currency_api"],
+        "filter": {
+          "name": "currency_api",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'currency_api'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--bin=currency_api",
+          "--package=currency_api"
+        ],
+        "filter": {
+          "name": "currency_api",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in library 'currency_core'",
+      "cargo": {
+        "args": ["test", "--no-run", "--lib", "--package=currency_core"],
+        "filter": {
+          "name": "currency_core",
+          "kind": "lib"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug executable 'currency_cli'",
+      "cargo": {
+        "args": ["build", "--bin=currency_cli", "--package=currency_cli"],
+        "filter": {
+          "name": "currency_cli",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'currency_cli'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--bin=currency_cli",
+          "--package=currency_cli"
+        ],
+        "filter": {
+          "name": "currency_cli",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

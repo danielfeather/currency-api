@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 use crate::CurrencyCode;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Rates {
     pub disclaimer: String,
     pub license: String,

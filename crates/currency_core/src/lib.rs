@@ -1,13 +1,13 @@
 use std::{collections::HashMap, fmt, str::FromStr};
 
-use chrono::{DateTime, Local, Utc};
+use chrono::Local;
 use providers::open_exchange_rates::Rates;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 pub mod providers;
 
-#[derive(Debug, Serialize, Deserialize, Hash, PartialEq, Eq)]
+#[derive(Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Clone)]
 pub struct CurrencyCode(pub String);
 
 #[derive(Debug, Error)]
@@ -41,11 +41,11 @@ impl FromStr for CurrencyCode {
     }
 }
 
-// impl fmt::Display for CurrencyCode {
-//     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-//         write!(f, "{}", self)
-//     }
-// }
+impl fmt::Display for CurrencyCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
 
 #[derive(Debug)]
 pub struct Currency {
@@ -113,21 +113,21 @@ impl Exchange {
         let from = self.from.expect("No from currency provided");
         let to = self.to.expect("No conversion currency specified");
 
-        if to == from.code {
-            return from;
-        }
+        // if to == from.code {
+        //     return from;
+        // }
 
         let Some(base_rate) = rates.rates.get(&from.code) else {
             panic!("Unable to convert to base rate");
         };
 
         let Some(to_base_rate) = rates.rates.get(&to) else {
-            panic!("Unable to find ro exchange rate");
+            panic!("Unable to find to exchange rate");
         };
 
         let converted_to_base = from.amount * base_rate;
 
-        let converted = converted_to_base * to_base_rate;
+        let converted = to_base_rate / converted_to_base;
 
         Currency {
             code: to,
@@ -160,5 +160,5 @@ fn test_change() {
 
     let currency = currency_builder.exchange(&exchange_info);
 
-    assert_eq!(currency.amount, 0.794593)
+    assert_eq!(currency.amount, 1.258506)
 }
