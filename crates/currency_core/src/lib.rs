@@ -47,7 +47,7 @@ impl fmt::Display for CurrencyCode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Currency {
     pub code: CurrencyCode,
     pub amount: f32,
@@ -88,6 +88,17 @@ impl FromStr for Currency {
     }
 }
 
+#[derive(Debug, Error)]
+pub enum ExchangeError {
+    #[error("The exchange was configured incorrect, missing 'to' or 'from' currency")]
+    InvalidConfiguration,
+    #[error("Currency code provided was invalid")]
+    CurrencyError(CurrencyParsingError),
+    #[error("No exchange rate available for {0}")]
+    UnsupportedCurrency(CurrencyCode),
+}
+
+/// Builder for converting currencies
 #[derive(Debug, Default)]
 pub struct Exchange {
     from: Option<Currency>,
@@ -99,40 +110,37 @@ impl Exchange {
         Self::default()
     }
 
+    /// Set the currency to convert to
     pub fn to(&mut self, code: CurrencyCode) -> &mut Self {
         self.to = Some(code);
         self
     }
 
+    /// Set the currency to convert from
     pub fn from(&mut self, currency: Currency) -> &mut Self {
         self.from = Some(currency);
         self
     }
 
-    pub fn exchange(self, rates: &Rates) -> Currency {
+    /// Convert the currency to the desired currency using cross-currency triangulation,
+    /// if no direct conversion is available
+    pub fn exchange(self, rates: &Rates) -> Result<Currency, ExchangeError> {
         let from = self.from.expect("No from currency provided");
         let to = self.to.expect("No conversion currency specified");
 
-        // if to == from.code {
-        //     return from;
-        // }
-
         let Some(base_rate) = rates.rates.get(&from.code) else {
-            panic!("Unable to convert to base rate");
+            return Err(ExchangeError::UnsupportedCurrency(from.code));
         };
 
         let Some(to_base_rate) = rates.rates.get(&to) else {
-            panic!("Unable to find to exchange rate");
+            return Err(ExchangeError::UnsupportedCurrency(to));
         };
 
-        let converted_to_base = from.amount * base_rate;
+        let rate = to_base_rate / base_rate;
 
-        let converted = to_base_rate / converted_to_base;
+        let amount = from.amount * rate;
 
-        Currency {
-            code: to,
-            amount: converted,
-        }
+        Ok(Currency { code: to, amount })
     }
 }
 

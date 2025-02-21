@@ -1,8 +1,8 @@
-use std::env;
+use std::{collections::HashMap, env};
 
 use currency_core::{
     providers::open_exchange_rates::{Rates, BASE_URL},
-    Currency, CurrencyCode, Exchange,
+    CurrencyCode, Exchange,
 };
 use thiserror::Error;
 use ureq::BodyReader;
@@ -10,27 +10,13 @@ use ureq::BodyReader;
 fn main() {
     let latest = fetch_latest_rates().expect("Failed to fetch rates");
 
+    let mut rates: HashMap<CurrencyCode, u32> = HashMap::new();
+
     for (code, rate) in latest.rates.iter() {
-        let mut exchange = Exchange::new();
-
-        let code = code.clone();
-
-        if code != CurrencyCode::new("GBP") {
-            continue;
-        }
-
-        exchange
-            .from(Currency::new(CurrencyCode::new("USD"), 1.0))
-            .to(code);
-
-        let currency = exchange.exchange(&latest);
-
-        println!(
-            "1.0 USD is {} {}",
-            (currency.amount * 100.0) as u32,
-            currency.code
-        )
+        rates.insert(code.clone(), (rate * 100.0).round() as u32);
     }
+
+    // ureq::post("http://localhost:3000/v1/rates")
 }
 
 #[derive(Debug, Error)]

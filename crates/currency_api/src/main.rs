@@ -1,19 +1,30 @@
+//! # Currency API
+//!
+//! Web API for aggregating exchange rates and providing currency exchange services
+
 use chrono::Local;
+use sqlx::{Pool, Sqlite};
 use std::{collections::HashMap, sync::Arc};
 
 use axum::{routing::get, Json, Router};
 
 use currency_core::{providers::open_exchange_rates::Rates, CurrencyCode};
 
+mod error;
 mod v1;
 
 struct ApiState {
+    pool: Pool<Sqlite>,
     rates: Rates,
 }
 
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt::init();
+
+    let pool = sqlx::sqlite::SqlitePool::connect("sqlite:crates/currency_api/data/currency_api.db")
+        .await
+        .unwrap();
 
     let mut rates = HashMap::new();
 
@@ -22,6 +33,7 @@ async fn main() {
     rates.insert(CurrencyCode("USD".to_string()), 1.0);
 
     let api_state = Arc::new(ApiState {
+        pool,
         rates: Rates {
             disclaimer: "Usage subject to terms: https://openexchangerates.org/terms".to_string(),
             license: "https://openexchangerates.org/license".to_string(),
