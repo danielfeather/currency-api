@@ -1,0 +1,31 @@
+services:
+  traefik:
+    image: traefik:v3.1.2
+    command:
+      - "--api.insecure=true"
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./docker/traefik/traefik.yml:/etc/traefik/dynamic/traefik.yml"
+      - "./docker/traefik/cert.pem:/etc/certs/currency_api.pem"
+      - "./docker/traefik/key.pem:/etc/certs/currency_api.key.pem"
+
+  api:
+    build:
+      context: .
+      dockerfile: crates/currency_api/docker/Dockerfile
+    volumes:
+      - ./:/usr/src/currency-api
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`api.currency.localhost`)"
+      - "traefik.http.routers.api.tls=true"
+      - "traefik.http.services.api.loadbalancer.server.port=3000"
